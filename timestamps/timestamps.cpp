@@ -1,6 +1,11 @@
 #include <chrono>
 #include <iostream>
 #include <boost/date_time.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/random_generator.hpp>
+#include <boost/uuid/string_generator.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/lexical_cast.hpp>
 
 typedef std::chrono::system_clock::time_point timestamp;
 
@@ -31,6 +36,18 @@ int main(int argc, const char *argv[])
 	std::cout << "posix_time: " << boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::universal_time()) << std::endl;
 	std::cout << "posix_time: " << boost::posix_time::to_iso_string(boost::posix_time::microsec_clock::universal_time()) << std::endl;
 	std::cout << "posix_time: " << boost::posix_time::to_iso_extended_string(boost::posix_time::microsec_clock::universal_time()) << std::endl;
+
+	boost::uuids::uuid id = boost::uuids::random_generator()();
+
+	std::string idstr = boost::lexical_cast<std::string>(id);
+
+	std::cout << "idstr: " << idstr << std::endl;
+
+	boost::uuids::uuid id2 = boost::uuids::string_generator()(idstr);
+
+	std::cout << "parsed: " << boost::lexical_cast<std::string>(id2) << std::endl;
+
+	std::cout << (id == id2) << std::endl;
 	
 
 	
