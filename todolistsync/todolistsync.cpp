@@ -5,6 +5,20 @@
 #include <boost/uuid/uuid_io.hpp>
 
 
+/*
+ * "Over the Wire" Format:
+ *
+ * ecb9be51-1b6b-4571-a067-1627308b8191;2015-08-19T14:07:51.046841;a;11;Hello World
+ * id;timestamp;command;length;string
+ * length and string are optional (or rather, only for commands that need it
+ *
+ * a ... add (has string)
+ * r ... remove
+ * e ... edit (has string)
+ * c ... check
+ * u ... uncheck
+ */
+
 int main(int argc, const char *argv[])
 {
 	TodoList::pointer todo_list = TodoList::create();
