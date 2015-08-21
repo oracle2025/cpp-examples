@@ -16,3 +16,8 @@ Command::timestamp Command::getTimestamp() const
     return m_timestamp;
 }
 
+std::string Command::serialize() const
+{
+    return "";
+}
+

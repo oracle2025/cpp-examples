@@ -14,3 +14,9 @@ int main(int argc, const char *argv[])
 	}
 	return 0;
 }
+
+/*
+ *
+ * SimpleReceiver server(2014, [](const std::string &input){std::cout << input << std::endl;});
+ *
+ */

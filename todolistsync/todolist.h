@@ -4,15 +4,16 @@
 #include <string>
 #include <memory>
 #include <list>
-#include <chrono>
 #include <boost/uuid/uuid.hpp>
+#include <boost/date_time.hpp>
 #include "todolog.h"
 
 class TodoList
 {
 public:
 	typedef boost::uuids::uuid id;
-	typedef std::chrono::system_clock::time_point timestamp;
+	//typedef std::chrono::system_clock::time_point timestamp;
+	typedef boost::posix_time::ptime timestamp;
 	typedef std::shared_ptr<TodoList> pointer;
 	static pointer create();
 

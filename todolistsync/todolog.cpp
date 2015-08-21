@@ -43,10 +43,10 @@ void TodoLog::debug_print_log() const
 {
 	std::cout << "-- debug_print_log BEGIN --" << std::endl;
 	for (auto i: m_log) {
-		std::time_t t = std::chrono::system_clock::to_time_t(i->getTimestamp());
+		/*std::time_t t = std::chrono::system_clock::to_time_t(i->getTimestamp());*/
 		std::cout << "ID: " << i->getId();
 		std::cout << " Type: " << typeid(*i).name();
-		std::cout << " Timestamp: " << std::ctime(&t);
+		std::cout << " Timestamp: " << i->getTimestamp() << std::endl;//std::ctime(&t);
 	}
 	std::cout << "-- debug_print_log END --" << std::endl;
 }

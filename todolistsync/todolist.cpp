@@ -19,7 +19,7 @@ bool TodoList::checked(id id_) const
 TodoList::id TodoList::add(const std::string &value)
 {
 	TodoList::id id = boost::uuids::random_generator()();
-	TodoList::timestamp timestamp = std::chrono::system_clock::now();
+	TodoList::timestamp timestamp = boost::posix_time::microsec_clock::universal_time();
 	Command::pointer cmd = CommandAdd::create(id, timestamp, value);
 	m_log->add(cmd);
 	return id;
@@ -43,28 +43,28 @@ std::string TodoList::get(id id_) const
 
 void TodoList::check(id id_)
 {
-	TodoList::timestamp timestamp = std::chrono::system_clock::now();
+	TodoList::timestamp timestamp = boost::posix_time::microsec_clock::universal_time();
 	Command::pointer cmd = CommandCheck::create(id_, timestamp);
 	m_log->add(cmd);
 }
 
 void TodoList::edit(id id_, const std::string &value)
 {
-	TodoList::timestamp timestamp = std::chrono::system_clock::now();
+	TodoList::timestamp timestamp = boost::posix_time::microsec_clock::universal_time();
 	Command::pointer cmd = CommandEdit::create(id_, timestamp, value);
 	m_log->add(cmd);
 }
 
 void TodoList::remove(id id_)
 {
-	TodoList::timestamp timestamp = std::chrono::system_clock::now();
+	TodoList::timestamp timestamp = boost::posix_time::microsec_clock::universal_time();
 	Command::pointer cmd = CommandRemove::create(id_, timestamp);
 	m_log->add(cmd);
 }
 
 void TodoList::uncheck(id id_)
 {
-	TodoList::timestamp timestamp = std::chrono::system_clock::now();
+	TodoList::timestamp timestamp = boost::posix_time::microsec_clock::universal_time();
 	Command::pointer cmd = CommandUncheck::create(id_, timestamp);
 	m_log->add(cmd);
 }
