@@ -9,6 +9,7 @@ class CommandCheck : public Command
 public:
 	static pointer create(id id_, timestamp timestamp_);
 	void doit(std::map<id, TodoListEntry::pointer> &l);
+	std::string serialize() const;
 private:
 	CommandCheck(id id_, timestamp timestamp_);
 };

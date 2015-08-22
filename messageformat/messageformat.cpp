@@ -135,6 +135,13 @@ command parse(const std::string& input)
 
 int main(int argc, const char *argv[])
 {
+	/*
+	 * uuid: 64bit?
+	 * timestamp? 32bit?
+	 * cmd: 8bit
+	 * len: 32bit?
+	 * Rest: Variable
+	 */
 	std::string add_cmd = "ecb9be51-1b6b-4571-a067-1627308b8191;20150820T090315.190570;a;11;Helle World";
 	std::string edit_cmd = "ecb9be51-1b6b-4571-a067-1627308b8191;20150820T090315.190570;e;11;Hello;World";
 	std::string check_cmd = "ecb9be51-1b6b-4571-a067-1627308b8191;20150820T090315.190570;c";

@@ -7,6 +7,7 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/date_time.hpp>
 #include "todolog.h"
+#include "todolistclient.h"
 
 class TodoList
 {
@@ -15,7 +16,7 @@ public:
 	//typedef std::chrono::system_clock::time_point timestamp;
 	typedef boost::posix_time::ptime timestamp;
 	typedef std::shared_ptr<TodoList> pointer;
-	static pointer create();
+	static pointer create(const std::string& server);
 
 	id add(const std::string &value);
 	void edit(id id_, const std::string &value);
@@ -27,8 +28,10 @@ public:
 	bool checked(id id_) const;
 
 private:
+	void log(Command::pointer cmd);
 	TodoLog::pointer m_log;
-	TodoList();
+	TodoListClient::pointer m_client;
+	TodoList(const std::string& server);
 	TodoList(TodoList const&) = delete;
 	TodoList& operator=(TodoList const&) = delete;
 };

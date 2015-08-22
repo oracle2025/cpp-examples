@@ -35,6 +35,7 @@ TodoLog::pointer TodoLog::create()
 }
 void TodoLog::add(Command::pointer cmd)
 {
+	//Find Add Duplicates?
 	m_log.push_back(cmd);
 	debug_print_log();
 	debug_eval_log();

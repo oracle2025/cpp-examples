@@ -9,6 +9,7 @@ class CommandUncheck : public Command
 public:
 	static pointer create(id id_, timestamp timestamp_);
 	void doit(std::map<id, TodoListEntry::pointer> &l);
+	std::string serialize() const;
 private:
 	CommandUncheck(id id_, timestamp timestamp_);
 };

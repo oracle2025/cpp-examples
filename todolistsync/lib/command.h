@@ -20,7 +20,7 @@ public:
 	id getId() const;
 	timestamp getTimestamp() const;
 
-	std::string serialize() const;
+	virtual std::string serialize() const = 0;
 protected:
 	Command(id id_, timestamp timestamp_);
  	id m_id;

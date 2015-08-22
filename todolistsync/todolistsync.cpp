@@ -37,6 +37,7 @@ int main(int argc, const char *argv[])
 	todo_list->remove(id_call);
 	todo_list->check(id_lettre);
 
+	//send log to server?
 
 	
 	return 0;

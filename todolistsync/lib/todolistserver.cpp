@@ -1,6 +1,7 @@
 #include "todolistserver.h"
 #include <boost/bind.hpp>
 #include <iostream>
+#include "commandparser.h"
 
 TodoListServer::TodoListServer() :
 	m_log(TodoLog::create())
@@ -23,8 +24,10 @@ void TodoListServer::start()
 void TodoListServer::receive(const std::string &input)
 {
 	std::cout << "TodoListServer::receive: " << input << std::endl;
-	//Command::pointer cmd = CommandAdd::unserialize(input);
-	//m_log->add(cmd);
+	Command::pointer cmd = CommandParser::parse(input);
+	if (cmd) {
+		m_log->add(cmd);
+	}
 }
 
 
