@@ -10,6 +10,7 @@ public:
 	static Command::pointer create(Command::id id_, Command::timestamp timestamp_, const std::string &text);
 	void doit(std::map<id, TodoListEntry::pointer> &l);
 	std::string serialize() const;
+	bool operator==(const Command &other) const;
 private:
 	CommandEdit(Command::id id_, Command::timestamp timestamp_, const std::string &text);
 	std::string m_text;

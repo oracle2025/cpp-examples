@@ -26,4 +26,12 @@ std::string CommandUncheck::serialize() const
 	result << ";u";
     return result.str();
 }
+bool CommandUncheck::operator==(const Command &other) const
+{
+	if (typeid(*this) != typeid(other)) {
+		return false;
+	}
+	return (m_id == other.getId()) &&
+		(m_timestamp == other.getTimestamp());
+}
 

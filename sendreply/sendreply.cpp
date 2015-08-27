@@ -3,6 +3,7 @@
 #include <string>
 #include <functional>
 #include <memory>
+#include <queue>
 #include <boost/bind.hpp>
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/ip/tcp.hpp>
@@ -72,6 +73,7 @@ class SendReplyConnection : public boost::enable_shared_from_this<SendReplyConne
 		}
 		void write(const std::string &value)
 		{
+			//Push the string to a fifo here!
 			size_t value_length = value.length();
 			size_t max_l = max_length;
 			size_t len = std::min(value_length, max_l);
@@ -104,8 +106,10 @@ class SendReplyConnection : public boost::enable_shared_from_this<SendReplyConne
   		{
     		auto self(shared_from_this());
     		boost::asio::async_write(socket_, boost::asio::buffer(data_, length),
+    				//Copy from fifo to a tmp string, that is deleted, later..
+                    //[this, self, tmpstring](boost::system::error_code ec, std::size_t [>length<])
         			[this, self](boost::system::error_code ec, std::size_t /*length*/)
-        			{});
+        			{/*if (!fifo.empty()) do_write(fifo.top().length()) cout << fifo.length*/});
   		}
 		tcp::socket socket_;
 		enum { max_length = 1024 };

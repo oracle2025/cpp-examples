@@ -36,6 +36,12 @@ TodoLog::pointer TodoLog::create()
 void TodoLog::add(Command::pointer cmd)
 {
 	//Find Add Duplicates?
+	for (auto i: m_log) {
+		//make this more efficient with a multi_map on id?
+		if (*i == *cmd) {
+			return;
+		}
+	}
 	m_log.push_back(cmd);
 	debug_print_log();
 	debug_eval_log();
@@ -58,5 +64,22 @@ void TodoLog::debug_eval_log()
 		std::cout << "[" << (i->getChecked()?"X":" ") << "] " << i->getText() << std::endl;
 	}
 	std::cout << "-- List END --" << std::endl;
+}
+std::list<Command::pointer> TodoLog::compress() const
+{
+	std::list<Command::pointer> result;
+	//Render the final log, and then recreate with using timestamps from the last change, ...
+	//
+    return result;
+}
+std::vector<std::string> TodoLog::serialize() const
+{
+	std::vector<std::string> result(m_log.size());
+	int index = 0;
+	for (auto i: m_log) {
+		result[index] = i->serialize();
+		index++;
+	}
+	return std::move(result);
 }
 

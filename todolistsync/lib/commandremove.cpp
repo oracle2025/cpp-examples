@@ -26,4 +26,12 @@ std::string CommandRemove::serialize() const
 	result << ";r";
     return result.str();
 }
+bool CommandRemove::operator==(const Command &other) const
+{
+	if (typeid(*this) != typeid(other)) {
+		return false;
+	}
+	return (m_id == other.getId()) &&
+		(m_timestamp == other.getTimestamp());
+}
 

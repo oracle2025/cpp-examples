@@ -28,4 +28,13 @@ std::string CommandEdit::serialize() const
 	result << m_text.length() << ";" << m_text;
     return result.str();
 }
+bool CommandEdit::operator==(const Command &other) const
+{
+	if (typeid(*this) != typeid(other)) {
+		return false;
+	}
+	return (m_id == other.getId()) &&
+		(m_timestamp == other.getTimestamp()) &&
+		(m_text == dynamic_cast<const CommandEdit*>(&other)->m_text);
+}
 

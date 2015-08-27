@@ -21,6 +21,7 @@ public:
 	timestamp getTimestamp() const;
 
 	virtual std::string serialize() const = 0;
+	virtual bool operator==(const Command &other) const = 0;
 protected:
 	Command(id id_, timestamp timestamp_);
  	id m_id;

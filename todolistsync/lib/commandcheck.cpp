@@ -26,4 +26,12 @@ std::string CommandCheck::serialize() const
 	result << ";c";
     return result.str();
 }
+bool CommandCheck::operator==(const Command &other) const
+{
+	if (typeid(*this) != typeid(other)) {
+		return false;
+	}
+	return (m_id == other.getId()) &&
+		(m_timestamp == other.getTimestamp());
+}
 
