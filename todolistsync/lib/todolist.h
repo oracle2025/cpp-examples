@@ -27,6 +27,10 @@ public:
 	std::string get(id id_) const;
 	bool checked(id id_) const;
 
+	void sync();
+
+	void run();
+
 private:
 	void log(Command::pointer cmd);
 	TodoLog::pointer m_log;

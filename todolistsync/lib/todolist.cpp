@@ -8,7 +8,7 @@
 
 TodoList::TodoList(const std::string& server) :
 	m_log(TodoLog::create()),
-	m_client(TodoListClient::create(server))
+	m_client(TodoListClient::create(m_log, server))
 {
 }
 
@@ -71,8 +71,17 @@ void TodoList::uncheck(id id_)
 }
 void TodoList::log(Command::pointer cmd)
 {
-	//Send to m_client!
-	m_client->send(cmd->serialize());
+	m_client->send(cmd);
 	m_log->add(cmd);
+}
+
+void TodoList::sync()
+{
+	m_client->get();
+}
+
+void TodoList::run()
+{
+	m_client->run();
 }
 

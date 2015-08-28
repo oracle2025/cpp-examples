@@ -1,5 +1,6 @@
 #include "todolistserver2.h"
 #include <boost/algorithm/string.hpp>
+#include "commandparser.h"
 
 class TodoListConnection : public Connection
 {
@@ -27,6 +28,7 @@ void TodoListConnection::receive(const std::string &value)
 	std::string strcmd = trim_copy(value);
 	if (strcmd == "get") {
 		for (auto i: m_log->serialize()) {
+			std::cout << "Sending: " << i << std::endl;
 			send(i+"\n");
 		}
 		//for (auto i: m_log) {send(i->serialize());}
@@ -35,6 +37,11 @@ void TodoListConnection::receive(const std::string &value)
 	} else if (strcmd == "cget") {
 		return;
 	} 
+	std::size_t remaining;
+	Command::pointer cmd = CommandParser::parse(value, remaining);
+	if (cmd) {
+		m_log->add(cmd);
+	}
 	//m_log->add(parse(value));
 	//if value == "get", reply with log
 	//if value == "cget", reply with compressed log

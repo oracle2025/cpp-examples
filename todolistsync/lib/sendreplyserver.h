@@ -22,6 +22,7 @@ class Connection
 		typedef std::function<void(const std::string& value)> reply_function;
 		virtual ~Connection() {}
 		virtual void receive(const std::string& value) = 0;
+		//make this also a lambda instead of a virtual?
 	protected:
 		Connection(reply_function send_) :
 			send(send_) {}

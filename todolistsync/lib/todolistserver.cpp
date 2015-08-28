@@ -34,7 +34,8 @@ void TodoListServer::receive(const std::string &input)
 	// 	 void Connection(log, function<> send)
 	//   void receive(string input)
 	//   }
-	Command::pointer cmd = CommandParser::parse(input);
+	std::size_t remaining;
+	Command::pointer cmd = CommandParser::parse(input, remaining);
 	if (cmd) {
 		m_log->add(cmd);
 	}

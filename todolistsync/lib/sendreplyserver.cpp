@@ -42,16 +42,23 @@ void SendReplyConnection::do_write()
 {
 	std::string value = m_fifo.front();
 	m_fifo.pop();
+	std::cout << "SendReplyConnection::do_write() " << value << std::endl;
 	size_t value_length = value.length();
 	size_t max_l = max_length;
 	size_t len = std::min(value_length, max_l);
 	memcpy(m_data, value.data(), len);
 	auto self(shared_from_this());
-	boost::asio::async_write(m_socket, boost::asio::buffer(m_data, len),
+	//m_socket.async_write_some(
+	boost::asio::async_write(m_socket,
+		boost::asio::buffer(m_data, len),
 			[this, self](boost::system::error_code ec, std::size_t /*length*/)
 			{
-				if (m_fifo.size() > 0) {
-					do_write();
+				if (!ec) {
+					if (m_fifo.size() > 0) {
+						do_write();
+					}
+				} else {
+					std::cout << "do_write error " << ec.value() << std::endl;
 				}
 			});
 }
@@ -63,6 +70,8 @@ void SendReplyConnection::setConnection(Connection::pointer connection)
 
 void SendReplyConnection::start()
 {
+	boost::asio::ip::tcp::no_delay option(true);
+	m_socket.set_option(option);
 	do_read();
 }
 

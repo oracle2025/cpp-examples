@@ -24,7 +24,7 @@ struct command {
 class CommandParser
 {
 public:
-	static Command::pointer parse(const std::string &input);
+	static Command::pointer parse(const std::string &input, std::size_t &remaining);
 private:
 	static std::string type_to_string(command_type t);
 

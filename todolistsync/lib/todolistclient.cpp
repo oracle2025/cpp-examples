@@ -1,49 +1,56 @@
 #include "todolistclient.h"
 #include <iostream>
 #include <boost/array.hpp>
-#include <boost/asio.hpp>
+#include <boost/algorithm/string.hpp>
+#include "commandparser.h"
 
 using boost::asio::ip::tcp;
 
-TodoListClient::TodoListClient(const std::string &server) :
-	m_server(server)
+TodoListClient::TodoListClient(TodoLog::pointer log, const std::string &server) :
+	m_log(log)
 {
+	m_client = SendReplyClient::create(server, 2015,
+			[this](const std::string& value) {
+				receive(value);
+			});
 }
-TodoListClient::pointer TodoListClient::create(const std::string &server)
+TodoListClient::pointer TodoListClient::create(TodoLog::pointer log, const std::string &server)
 {
-    return pointer(new TodoListClient(server));
+    return pointer(new TodoListClient(log, server));
+}
+void TodoListClient::send(Command::pointer cmd)
+{
+	m_client->send(cmd->serialize());
+}
+void TodoListClient::get()
+{
+	m_client->send("get");
 }
 
-void TodoListClient::send(const std::string &output)
+
+/*void TodoListClient::send(const std::string &output)
 {
-	try
-  	{
+	m_client->send(output);
+}*/
+void TodoListClient::receive(const std::string& value)
+{
+	std::string input(value);
+	std::size_t remaining = input.length();
+	while (remaining && input.length() > 1) {
+		Command::pointer cmd = CommandParser::parse(input, remaining);
+		if (cmd) {
+			m_log->add(cmd);
+			if (remaining) {
+				input = input.substr(remaining);
+			}
+		} else {
+			remaining = 0;
+		}
+	}
+}
 
-    	boost::asio::io_service io_service;
-
-    	tcp::resolver resolver(io_service);
-    	tcp::resolver::query query(m_server, "2015");
-    	tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
-
-    	tcp::socket socket(io_service);
-    	boost::asio::connect(socket, endpoint_iterator);
-
-      	boost::array<char, 128> buf;
-      	boost::system::error_code error;
-
-		size_t len = socket.write_some(boost::asio::buffer(output, output.length()));
-        //size_t len = socket.read_some(boost::asio::buffer(buf), error);
-
-      	if (error == boost::asio::error::eof) {
-        	; // Connection closed cleanly by peer.
-      	} else if (error)
-        	throw boost::system::system_error(error); // Some other error.
-
-        //std::cout.write(buf.data(), len);
-  	}
-  	catch (std::exception& e)
-  	{
-    	std::cerr << e.what() << std::endl;
-  	}
+void TodoListClient::run()
+{
+	m_client->run();
 }
 

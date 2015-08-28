@@ -13,8 +13,9 @@
 #include <boost/algorithm/string/classification.hpp>
 
 
-Command::pointer CommandParser::parse(const std::string &input)
+Command::pointer CommandParser::parse(const std::string &input, std::size_t &remaining)
 {
+	remaining = 0;
 	//tokens = split(input);
 	//len(tokens) < 3: return invalid;
 	/*
@@ -39,6 +40,15 @@ Command::pointer CommandParser::parse(const std::string &input)
 	result.type = parse_type(tokens[2]);
 	result.text = "";
 
+	{
+		std::size_t start = 0;
+		for (int i = 0; i < 2; i++) {
+			start = input.find(";", start) + 1;
+		}
+		start += 1;
+		remaining = start;
+	}
+
 	if ((result.type == command_type::add ||
 			result.type == command_type::edit) &&
 			tokens.size() >= 5) {
@@ -50,6 +60,7 @@ Command::pointer CommandParser::parse(const std::string &input)
 		}
 		std::string text_str = input.substr(start, text_len);
 		result.text = text_str;
+		remaining = start+text_len;
 		/*std::cout << "Text: " << text_str << std::endl;*/
 	}
 	/*if (!is_valid_uuid(uuid_str)) {

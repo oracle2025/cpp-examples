@@ -16,7 +16,7 @@ class TodoListServer2
 	private:
 		TodoLog::pointer m_log;
 		SendReplyServer::pointer m_server;
-		void receive(const std::string &inpput);
+		void receive(const std::string &input);
 		TodoListServer2();
 		TodoListServer2(TodoListServer2 const&) = delete;
 		TodoListServer2& operator=(TodoListServer2 const&) = delete;
