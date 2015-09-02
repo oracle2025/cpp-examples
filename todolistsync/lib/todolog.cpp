@@ -23,6 +23,9 @@ std::list<TodoListEntry::pointer> TodoLog::evaluate()
 	for (auto i: tmpmap) {
 		result.push_back(i.second);
 	}
+	result.sort([](const TodoListEntry::pointer &p1, const TodoListEntry::pointer &p2) {
+			return (p1->getTimestamp() < p2->getTimestamp());
+			});
 	// add entrys to a map
 	// (optional: Sort Map into list)
 	// return list;

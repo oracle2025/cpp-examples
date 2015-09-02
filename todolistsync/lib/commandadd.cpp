@@ -14,7 +14,7 @@ Command::pointer CommandAdd::create(Command::id id, Command::timestamp timestamp
 
 void CommandAdd::doit(std::map<id, TodoListEntry::pointer> &l)
 {
-	l[m_id] = TodoListEntry::create(m_id, m_text);
+	l[m_id] = TodoListEntry::create(m_id, m_text, m_timestamp);
 }
 std::string CommandAdd::serialize() const
 {

@@ -76,6 +76,7 @@ SendReplyClient::~SendReplyClient()
 
 void SendReplyClient::run()
 {
+	//std::thread t([&m_io_service](){ m_io_service.run(); });
 	m_io_service.run();
 }
 
