@@ -34,12 +34,17 @@ void TodoListClient::get()
 }*/
 void TodoListClient::receive(const std::string& value)
 {
+	//This comes from the io_service thread...so, "log->add" should probably be protected by a mutex, ..
+	//And then we still have no signaling to the gui
 	std::string input(value);
 	std::size_t remaining = input.length();
 	while (remaining && input.length() > 1) {
 		Command::pointer cmd = CommandParser::parse(input, remaining);
 		if (cmd) {
 			m_log->add(cmd);
+
+			/* Create a path to submit ti ITodoListDisplay */
+
 			if (remaining) {
 				input = input.substr(remaining);
 			}

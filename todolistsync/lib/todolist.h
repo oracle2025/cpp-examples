@@ -13,9 +13,9 @@ class TodoList
 {
 public:
 	typedef boost::uuids::uuid id;
-	//typedef std::chrono::system_clock::time_point timestamp;
 	typedef boost::posix_time::ptime timestamp;
 	typedef std::shared_ptr<TodoList> pointer;
+
 	static pointer create(const std::string& server);
 
 	id add(const std::string &value);

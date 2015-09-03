@@ -7,6 +7,7 @@
 #include <boost/date_time.hpp>
 #include <map>
 #include <string>
+#include "itodolistdisplay.h"
 
 class TodoListWidget : public Fl_Browser_
 {
@@ -50,6 +51,9 @@ class TodoListWidget : public Fl_Browser_
 		std::string text(boost::uuids::uuid line) const;
 		void text(boost::uuids::uuid line, const std::string& value);
 		void remove(boost::uuids::uuid line);
+
+		void check(boost::uuids::uuid line);
+		void uncheck(boost::uuids::uuid line);
 
 	private:
 		TodoList::pointer m_todolist;
