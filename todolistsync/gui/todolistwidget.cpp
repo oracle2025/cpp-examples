@@ -62,8 +62,10 @@ int TodoListWidget::handle(int event)
 					cb_item *i = (cb_item *)l;
 					if (i->checked) {
 						i->checked = 0;
+						if (m_todolist) { m_todolist->uncheck(i->id); }
 					} else {
 						i->checked = 1;
+						if (m_todolist) { m_todolist->check(i->id); }
 					}
 					redraw_line(l);
 				}
@@ -189,7 +191,11 @@ void TodoListWidget::add(const std::string& value)
 	p->checked = 0;
 	p->selected = 0;
 	p->text = value;
-	p->id = boost::uuids::random_generator()();
+	if (m_todolist) {
+		p->id = m_todolist->add(value);
+	} else {
+		p->id = boost::uuids::random_generator()();
+	}
 	p->created_at = boost::posix_time::microsec_clock::universal_time();
 	if (last) {
 		last->next = p;
@@ -221,6 +227,9 @@ void TodoListWidget::remove(boost::uuids::uuid line)
 	if (selected == p) {
 		selected = 0;
 	}
+	if (m_todolist) {
+		m_todolist->remove(line);
+	}
 	ids_to_items_.erase(ids_to_items_.find(line));
 	delete p;
 }
@@ -233,5 +242,8 @@ void TodoListWidget::text(boost::uuids::uuid line, const std::string& value)
 	cb_item *p = ids_to_items_.at(line);
 	p->text = value;
 	redraw_line(p);
+	if (m_todolist) {
+		m_todolist->edit(line, value);
+	}
 }
 

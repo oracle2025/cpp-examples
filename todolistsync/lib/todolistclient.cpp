@@ -54,3 +54,9 @@ void TodoListClient::run()
 	m_client->run();
 }
 
+
+void TodoListClient::close()
+{
+	m_client->close();
+}
+

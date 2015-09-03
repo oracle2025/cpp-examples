@@ -13,12 +13,11 @@ int main(int argc, const char *argv[])
 
 	TodoLog::pointer log = server->log();
 
-	TodoList::id id = boost::uuids::random_generator()();
+	/*TodoList::id id = boost::uuids::random_generator()();
 	TodoList::timestamp timestamp = boost::posix_time::microsec_clock::universal_time();
 	Command::pointer cmd = CommandAdd::create(id, timestamp, "Get Milk");
 	log->add(cmd);
 
-	//for (int i = 0; i < 5;i++) {
 
 	id = boost::uuids::random_generator()();
 	timestamp = boost::posix_time::microsec_clock::universal_time();
@@ -39,8 +38,7 @@ int main(int argc, const char *argv[])
 	timestamp = boost::posix_time::microsec_clock::universal_time();
 	cmd = CommandAdd::create(id, timestamp, "Call Jen");
 	log->add(cmd);
-	//}
-
+*/
 	server->start();
 
 	return 0;

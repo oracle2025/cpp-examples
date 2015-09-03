@@ -91,4 +91,8 @@ void SendReplyClient::send(const std::string &value)
 			});
 
 }
+void SendReplyClient::close()
+{
+	m_io_service.post([this]() { m_socket.close(); });
+}
 

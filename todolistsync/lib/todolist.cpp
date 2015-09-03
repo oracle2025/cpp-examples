@@ -85,3 +85,9 @@ void TodoList::run()
 	m_client->run();
 }
 
+void TodoList::close()
+{
+	m_client->close();
+}
+
+

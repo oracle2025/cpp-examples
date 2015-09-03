@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <thread>
 #include "todolistwidget.h"
 
 TodoListWidget *g_list_view;
@@ -100,6 +101,12 @@ int main(int argc, char *argv[])
 	//Fl_Browser *list_view = g_list_view = new Fl_Hold_Browser(0, 25, 480, 590);
 	TodoListWidget *list_view = g_list_view = new TodoListWidget(0, 25, 480, 590);
 
+	TodoList::pointer todolist = TodoList::create("localhost");
+	//todolist->run();
+	std::thread t([todolist](){ todolist->run(); });
+
+	list_view->setTodoList(todolist);
+
 	Fl_Button *edit_button = g_edit_button = new Fl_Button(0, 615, 240, 25, "Edit Entry");
 
 	Fl_Button *delete_button = g_delete_button = new Fl_Button(240, 615, 240, 25, "Delete Entry");
@@ -141,6 +148,11 @@ int main(int argc, char *argv[])
 	window->end();
 
 	window->show(argc, argv);
+
+	int result = Fl::run();
+
+	todolist->close();
+	t.join();
 	
-	return Fl::run();
+	return result;
 }

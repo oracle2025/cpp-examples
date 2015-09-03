@@ -30,6 +30,7 @@ public:
 	void sync();
 
 	void run();
+	void close();
 
 private:
 	void log(Command::pointer cmd);

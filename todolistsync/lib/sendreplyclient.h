@@ -18,6 +18,7 @@ class SendReplyClient
 		static pointer create(const std::string &server, int port, reply_function reply_);
 
 		void send(const std::string &value);
+		void close();
 		void run();
 	private:
 		SendReplyClient(const std::string &server, int port, reply_function reply_);

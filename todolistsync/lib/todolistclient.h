@@ -15,6 +15,7 @@ class TodoListClient
 		//void send(const std::string &output);
 		void send(Command::pointer cmd);
 		void get();
+		void close();
 
 		void run();
 
