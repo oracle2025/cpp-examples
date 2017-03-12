@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 2.8.11)
 
 project(${exercise} CXX)
 
+include (GenerateExportHeader)
+
+
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
@@ -21,4 +24,15 @@ target_include_directories(${example} PRIVATE ${Boost_INCLUDE_DIRS})
 target_link_libraries(${example} ${Boost_LIBRARIES} ${FLTK_LIBRARIES})
 
 #add_custom_command(TARGET ${example} POST_BUILD COMMAND ${example})
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+add_library(sample SHARED lib.h lib.cpp)
+generate_export_header(sample)
+
+
+
+
+
+
+
 
