@@ -1,0 +1,68 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0304
+header_name {.h}
+code_name {.cpp}
+decl {\#include <iostream>} {private global
+}
+
+decl {\#include <fstream>} {private global
+}
+
+decl {\#include "json.hpp"} {private global
+}
+
+decl {using json = nlohmann::json;} {private global
+}
+
+widget_class AddressBookWidget {open
+  xywh {497 213 399 181} type Double visible
+} {
+  Fl_Counter {} {
+    xywh {130 115 140 25} step 1
+  }
+  Fl_Input name_input {
+    label Name
+    xywh {130 10 140 25}
+  }
+  Fl_Input phone_input {
+    label Telephone
+    xywh {130 35 140 25}
+  }
+  Fl_Text_Editor adress_input {
+    label Adress
+    xywh {130 60 140 55} align 7
+  }
+  Function {~AddressBookWidget()} {open
+  } {
+    code {std::cout << "Destructor" << std::endl;
+std::ofstream o("file.json");
+if (o.is_open()) {
+	json j;
+	j["name"] = name_input->value();
+	j["phone"] = phone_input->value();
+	j["address"] = adress_input->buffer()->text();
+	o << j << std::endl;
+	o.close();
+}} {}
+  }
+  code {std::cout << "Constructor" << std::endl;
+adress_input->buffer(new Fl_Text_Buffer());
+std::ifstream i("file.json");
+if (i.is_open()) {
+	json j;
+	i >> j;
+	if (j.count("name")) {
+		name_input->value(j["name"].get<std::string>().c_str());
+	}
+	if (j.count("phone")) {
+		phone_input->value(j["phone"].get<std::string>().c_str());
+	}
+	if (j.count("address")) {
+		adress_input->buffer()->text(j["address"].get<std::string>().c_str());
+	}
+}} {}
+  Fl_Button {} {
+    label Button selected
+    xywh {130 140 140 25}
+  }
+}

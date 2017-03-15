@@ -9,6 +9,8 @@ extern "C" {
 
 const char* SAMPLE_EXPORT string_from_lib();
 
+void * SAMPLE_EXPORT get_widget();
+
 #ifdef __cplusplus
 }
 #endif
