@@ -8,7 +8,9 @@ class CommandEdit : public Command
 {
 public:
 	static Command::pointer create(Command::id id_, Command::timestamp timestamp_, const std::string &text);
+	static Command::pointer create(Command::id id_, const std::string &text);
 	void doit(std::map<id, TodoListEntry::pointer> &l);
+	void doit(ITodoListMap* l);
 	std::string serialize() const;
 	bool operator==(const Command &other) const;
 private:

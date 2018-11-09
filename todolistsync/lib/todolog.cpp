@@ -46,7 +46,7 @@ void TodoLog::add(Command::pointer cmd)
 		}
 	}
 	m_log.push_back(cmd);
-	debug_print_log();
+	/*debug_print_log();*/
 	debug_eval_log();
 }
 void TodoLog::debug_print_log() const
@@ -64,7 +64,7 @@ void TodoLog::debug_eval_log()
 {
 	std::cout << "-- List: --" << std::endl;
 	for (auto i: evaluate()) {
-		std::cout << "[" << (i->getChecked()?"X":" ") << "] " << i->getText() << std::endl;
+		std::cout << "[" << (i->getChecked()?"X":" ") << "] " << i->getText() << " (" << i->getId() << ")" << std::endl;
 	}
 	std::cout << "-- List END --" << std::endl;
 }

@@ -5,6 +5,7 @@
 #include "todolistclient.h"
 #include "todolog.h"
 #include "itodolistdisplay.h"
+#include <mutex>
 
 class TodoList2
 {
@@ -17,11 +18,16 @@ public:
 	void from_display(Command::pointer cmd);
 	void from_connection(Command::pointer cmd);
 
+	void run();
+	void close();
+
 private:
+	std::mutex m_mutex;
+	typedef std::lock_guard<decltype(m_mutex)> type_lock;
 	TodoList2(const std::string& server);
-	TodoListClient::pointer m_connection; //ITodoListDisplay
 	ITodoListDisplay *m_display;   //ITodoListDisplay
 	TodoLog::pointer m_log;
+	TodoListClient::pointer m_connection; //ITodoListDisplay
 
 
 	TodoList2(TodoList2 const&) = delete;

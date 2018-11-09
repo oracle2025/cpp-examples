@@ -10,6 +10,7 @@
 #include <thread>
 #include "todolistwidget.h"
 #include "todolistwindow.h"
+#include "todolist2.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,7 +19,10 @@ int main(int argc, char *argv[])
 
 	TodoListWindow *w = new TodoListWindow(480, 640);
 
-	TodoList::pointer todolist = TodoList::create("localhost");
+	TodoList2::pointer todolist = TodoList2::create("localhost");
+
+	todolist->setDisplay(w->todoListWidget());
+
 	std::thread t([todolist](){ todolist->run(); });
 
 	/*list_view->setTodoList(todolist);*/

@@ -9,7 +9,10 @@
 #include <string>
 #include "itodolistdisplay.h"
 
-class TodoListWidget : public Fl_Browser_
+class TodoListWidget :
+	public Fl_Browser_,
+	public ITodoListDisplay,
+	public ITodoListMap
 {
   		void *item_first() const;
   		void *item_next(void *l) const;
@@ -54,10 +57,19 @@ class TodoListWidget : public Fl_Browser_
 
 		void check(boost::uuids::uuid line);
 		void uncheck(boost::uuids::uuid line);
+		void add(
+				boost::uuids::uuid line,
+				const std::string& value,
+				boost::posix_time::ptime timestamp);
+
+		void send(Command::pointer cmd);
+		void setFromDisplayFunction(from_display_function func);
 
 	private:
+		from_display_function from_display;
 		TodoList::pointer m_todolist;
 		int handle(int event);
+		bool send_from_display;
 };
 
 #endif /* _TODO_LIST_WIDGET_H_ */

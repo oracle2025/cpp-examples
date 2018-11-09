@@ -112,4 +112,8 @@ void TodoListWindow::cbWindow(Fl_Widget* w)
 {
 	hide();
 }
+TodoListWidget *TodoListWindow::todoListWidget() const
+{
+    return m_list_view;
+}
 

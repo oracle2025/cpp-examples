@@ -18,6 +18,8 @@ public:
 	void cbWindow(Fl_Widget* w);
 	void cbListView(Fl_Widget* w);
 
+	TodoListWidget *todoListWidget() const;
+
 private:
 	TodoListWidget *m_list_view;
 	Fl_Button *m_add_button;

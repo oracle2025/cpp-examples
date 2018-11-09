@@ -8,17 +8,33 @@ decl {\#include <iostream>} {private global
 decl {\#include <fstream>} {private global
 }
 
+decl {\#include <string>} {public global
+}
+
+decl {\#include <vector>} {selected public global
+}
+
 decl {\#include "json.hpp"} {private global
 }
 
 decl {using json = nlohmann::json;} {private global
 }
 
+class Person {open
+} {
+  decl {std::string name;} {public local
+  }
+  decl {std::string phone;} {public local
+  }
+  decl {std::string address;} {public local
+  }
+}
+
 widget_class AddressBookWidget {open
-  xywh {497 213 399 181} type Double visible
+  xywh {451 188 399 181} type Double visible
 } {
   Fl_Counter {} {
-    xywh {130 115 140 25} step 1
+    xywh {130 115 140 25} minimum 0 maximum 1 step 1
   }
   Fl_Input name_input {
     label Name
@@ -62,7 +78,9 @@ if (i.is_open()) {
 	}
 }} {}
   Fl_Button {} {
-    label Button selected
+    label Button
     xywh {130 140 140 25}
+  }
+  decl {std::vector<Person> m_persons;} {private local
   }
 }

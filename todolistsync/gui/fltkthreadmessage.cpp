@@ -1,5 +1,6 @@
 #include "fltkthreadmessage.h"
 #include <FL/Fl.H>
+#include <iostream>
 
 static void fltk_thread_handler(void *msg)
 {
@@ -11,12 +12,12 @@ static void fltk_thread_handler(void *msg)
 FltkThreadMessage::FltkThreadMessage(thread_function func) :
 	m_function(func)
 {
-	FltkThreadMessage *msg = new FltkThreadMessage(func);
-	Fl::awake(fltk_thread_handler, (void*)msg);
 }
 
 void FltkThreadMessage::create(thread_function func)
 {
+	FltkThreadMessage *msg = new FltkThreadMessage(func);
+	Fl::awake(fltk_thread_handler, (void*)msg);
 }
 
 void FltkThreadMessage::doit()

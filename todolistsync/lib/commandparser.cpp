@@ -10,6 +10,7 @@
 #include <boost/date_time.hpp>
 #include <boost/uuid/string_generator.hpp>
 #include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/classification.hpp>
 
 
@@ -97,7 +98,8 @@ boost::posix_time::ptime CommandParser::parse_timestamp(const std::string &str)
 
 boost::uuids::uuid CommandParser::parse_id(const std::string &str)
 {
-	return boost::uuids::string_generator()(str);
+	std::cout << "Parse Id: " << str << std::endl;
+	return boost::uuids::string_generator()( boost::algorithm::trim_copy(str) );
 }
 
 command_type CommandParser::parse_type(const std::string &str)

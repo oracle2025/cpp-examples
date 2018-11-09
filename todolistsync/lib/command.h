@@ -6,6 +6,9 @@
 #include <map>
 #include <boost/uuid/uuid.hpp>
 #include <boost/date_time.hpp>
+
+class ITodoListMap;
+
 class Command
 {
 public:
@@ -15,6 +18,7 @@ public:
 	typedef std::shared_ptr<Command> pointer;
 	virtual ~Command() {}
 	virtual void doit(std::map<id, TodoListEntry::pointer> &l) = 0;
+	virtual void doit(ITodoListMap* l) = 0;
 	//virtual void doit(TodoLog *log) = 0;
 
 	id getId() const;

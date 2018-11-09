@@ -1,6 +1,7 @@
 #include "commandedit.h"
 #include <sstream>
 #include <boost/uuid/uuid_io.hpp>
+#include "itodolistdisplay.h"
 
 CommandEdit::CommandEdit(Command::id id_, Command::timestamp timestamp_, const std::string &text) :
 	Command(id_, timestamp_), m_text(text)
@@ -11,6 +12,10 @@ Command::pointer CommandEdit::create(Command::id id_, Command::timestamp timesta
 {
 	return pointer(new CommandEdit(id_, timestamp_, text));
 }
+Command::pointer CommandEdit::create(Command::id id_, const std::string &text)
+{
+	return create(id_, boost::posix_time::microsec_clock::universal_time(), text);
+}
 
 void CommandEdit::doit(std::map<id, TodoListEntry::pointer> &l)
 {
@@ -18,6 +23,11 @@ void CommandEdit::doit(std::map<id, TodoListEntry::pointer> &l)
 		l.at(m_id)->setText(m_text);
 	}
 }
+void CommandEdit::doit(ITodoListMap* l)
+{
+	l->text(m_id, m_text);
+}
+
 std::string CommandEdit::serialize() const
 {
 	std::stringstream result;

@@ -6,17 +6,17 @@
 
 using boost::asio::ip::tcp;
 
-TodoListClient::TodoListClient(TodoLog::pointer log, const std::string &server) :
-	m_log(log)
+TodoListClient::TodoListClient(cmd_function cmd_send_, const std::string &server) :
+	cmd_send(cmd_send_)
 {
 	m_client = SendReplyClient::create(server, 2015,
 			[this](const std::string& value) {
 				receive(value);
 			});
 }
-TodoListClient::pointer TodoListClient::create(TodoLog::pointer log, const std::string &server)
+TodoListClient::pointer TodoListClient::create(cmd_function cmd_send_, const std::string &server)
 {
-    return pointer(new TodoListClient(log, server));
+    return pointer(new TodoListClient(cmd_send_, server));
 }
 void TodoListClient::send(Command::pointer cmd)
 {
@@ -38,10 +38,12 @@ void TodoListClient::receive(const std::string& value)
 	//And then we still have no signaling to the gui
 	std::string input(value);
 	std::size_t remaining = input.length();
+	std::cout << "TodoListClient::receive: " << value << std::endl;
 	while (remaining && input.length() > 1) {
 		Command::pointer cmd = CommandParser::parse(input, remaining);
 		if (cmd) {
-			m_log->add(cmd);
+			cmd_send(cmd);
+			//m_log->add(cmd);
 
 			/* Create a path to submit ti ITodoListDisplay */
 

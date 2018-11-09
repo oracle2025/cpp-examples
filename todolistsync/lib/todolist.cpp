@@ -8,7 +8,7 @@
 
 TodoList::TodoList(const std::string& server) :
 	m_log(TodoLog::create()),
-	m_client(TodoListClient::create(m_log, server))
+	m_client(TodoListClient::create([this](Command::pointer cmd){m_log->add(cmd);}, server))
 {
 }
 

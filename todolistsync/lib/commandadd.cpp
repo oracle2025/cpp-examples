@@ -1,6 +1,7 @@
 #include "commandadd.h"
 #include <sstream>
 #include <boost/uuid/uuid_io.hpp>
+#include "itodolistdisplay.h"
 
 CommandAdd::CommandAdd(Command::id id, Command::timestamp timestamp, const std::string &text)
 	: Command(id, timestamp), m_text(text)
@@ -34,5 +35,9 @@ bool CommandAdd::operator==(const Command &other) const
 	return (m_id == other.getId()) &&
 		(m_timestamp == other.getTimestamp()) &&
 		(m_text == dynamic_cast<const CommandAdd*>(&other)->m_text);
+}
+void CommandAdd::doit(ITodoListMap* l)
+{
+	l->add(m_id, m_text, m_timestamp);
 }
 

@@ -2,9 +2,16 @@
 /*#include <iostream>*/
 #include <FL/fl_draw.H>
 #include <boost/uuid/uuid_generators.hpp>
+#include "fltkthreadmessage.h"
+#include "commanduncheck.h"
+#include "commandadd.h"
+#include "commandedit.h"
+#include "commandcheck.h"
+#include "commandremove.h"
 
 TodoListWidget::TodoListWidget(int x, int y, int w, int h, const char *label) :
-	Fl_Browser_(x, y, w, h, label)
+	Fl_Browser_(x, y, w, h, label),
+	send_from_display(true)
 {
 	/*type(FL_SELECT_BROWSER);*/
 	type(FL_HOLD_BROWSER);
@@ -63,9 +70,15 @@ int TodoListWidget::handle(int event)
 					if (i->checked) {
 						i->checked = 0;
 						if (m_todolist) { m_todolist->uncheck(i->id); }
+						if (send_from_display) {
+							from_display(CommandUncheck::create(i->id));
+						}
 					} else {
 						i->checked = 1;
 						if (m_todolist) { m_todolist->check(i->id); }
+						if (send_from_display) {
+							from_display(CommandCheck::create(i->id));
+						}
 					}
 					redraw_line(l);
 				}
@@ -197,6 +210,9 @@ void TodoListWidget::add(const std::string& value)
 		p->id = boost::uuids::random_generator()();
 	}
 	p->created_at = boost::posix_time::microsec_clock::universal_time();
+	if (send_from_display) {
+		from_display(CommandAdd::create(p->id, p->created_at, value));
+	}
 	if (last) {
 		last->next = p;
 		p->prev = last;
@@ -230,6 +246,9 @@ void TodoListWidget::remove(boost::uuids::uuid line)
 	if (m_todolist) {
 		m_todolist->remove(line);
 	}
+	if (send_from_display) {
+		from_display(CommandRemove::create(line));
+	}
 	ids_to_items_.erase(ids_to_items_.find(line));
 	delete p;
 }
@@ -245,5 +264,69 @@ void TodoListWidget::text(boost::uuids::uuid line, const std::string& value)
 	if (m_todolist) {
 		m_todolist->edit(line, value);
 	}
+	if (send_from_display) {
+		from_display(CommandEdit::create(line, value));
+	}
+}
+void TodoListWidget::send(Command::pointer cmd)
+{
+	//decode first?
+	FltkThreadMessage::create([this, cmd](){
+			send_from_display = false;
+			cmd->doit(this);
+			send_from_display = true;
+			});
+}
+
+void TodoListWidget::setFromDisplayFunction(from_display_function func)
+{
+	from_display = func;
+}
+void TodoListWidget::add(
+		boost::uuids::uuid line,
+		const std::string& value,
+		boost::posix_time::ptime timestamp)
+{
+	cb_item *p = new cb_item;
+	p->next = 0;
+	p->prev = 0;
+	p->checked = 0;
+	p->selected = 0;
+	p->text = value;
+	p->id = line;
+	p->created_at = timestamp;
+	if (send_from_display) {
+		from_display(CommandAdd::create(p->id, p->created_at, value));
+	}
+	//Find insert point
+	if (last) {
+		last->next = p;
+		p->prev = last;
+		last = p;
+	} else {
+		first = last = p;
+	}
+	ids_to_items_[p->id] = p;
+	redraw_line(p);
+}
+
+void TodoListWidget::check(boost::uuids::uuid line)
+{
+	if (ids_to_items_.find(line) == ids_to_items_.end()) {
+		return;
+	}
+	cb_item *p = ids_to_items_.at(line);
+	p->checked = 1;
+	redraw_line(p);
+}
+
+void TodoListWidget::uncheck(boost::uuids::uuid line)
+{
+	if (ids_to_items_.find(line) == ids_to_items_.end()) {
+		return;
+	}
+	cb_item *p = ids_to_items_.at(line);
+	p->checked = 0;
+	redraw_line(p);
 }
 

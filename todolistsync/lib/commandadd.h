@@ -9,6 +9,7 @@ class CommandAdd : public Command
 public:
 	static Command::pointer create(Command::id id, Command::timestamp timestamp, const std::string &text);
 	void doit(std::map<id, TodoListEntry::pointer> &l);
+	void doit(ITodoListMap* l);
 	std::string serialize() const;
 	bool operator==(const Command &other) const;
 private:

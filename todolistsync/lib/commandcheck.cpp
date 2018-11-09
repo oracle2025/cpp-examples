@@ -1,5 +1,6 @@
 #include "commandcheck.h"
 #include <boost/uuid/uuid_io.hpp>
+#include "itodolistdisplay.h"
 
 CommandCheck::CommandCheck(id id_, timestamp timestamp_)
 	: Command(id_, timestamp_)
@@ -10,6 +11,10 @@ Command::pointer CommandCheck::create(id id_, timestamp timestamp_)
 {
 	return pointer(new CommandCheck(id_, timestamp_));
 }
+Command::pointer CommandCheck::create(id id_)
+{
+	return create(id_, boost::posix_time::microsec_clock::universal_time());
+}
 
 void CommandCheck::doit(std::map<id, TodoListEntry::pointer> &l)
 {
@@ -17,6 +22,11 @@ void CommandCheck::doit(std::map<id, TodoListEntry::pointer> &l)
 		l.at(m_id)->setChecked(true);
 	}
 }
+void CommandCheck::doit(ITodoListMap* l)
+{
+	l->check(m_id);
+}
+
 std::string CommandCheck::serialize() const
 {
 	std::stringstream result;
